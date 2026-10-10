@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>@three-ws/avatar-cli: Terminal-native tooling for on-chain avatars: scaffold, validate, hash, and preview avat</title>
+<meta name="description" content="Terminal-native tooling for on-chain avatars: scaffold, validate, hash, and preview avatar manifests from your shell or CI.">
+<link rel="canonical" href="https://nirholas.github.io/three-ws-avatar-cli/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="@three-ws/avatar-cli">
+<meta property="og:description" content="Terminal-native tooling for on-chain avatars: scaffold, validate, hash, and preview avatar manifests from your shell or CI.">
+<meta property="og:url" content="https://nirholas.github.io/three-ws-avatar-cli/">
+<meta property="og:image" content="https://nirholas.github.io/three-ws-avatar-cli/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="alternate" type="text/plain" href="https://nirholas.github.io/three-ws-avatar-cli/llms.txt" title="llms.txt">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareSourceCode","name":"@three-ws/avatar-cli","description":"Terminal-native tooling for on-chain avatars: scaffold, validate, hash, and preview avatar manifests from your shell or CI.","codeRepository":"https://github.com/nirholas/three-ws-avatar-cli","url":"https://nirholas.github.io/three-ws-avatar-cli/","programmingLanguage":"JavaScript","license":"https://spdx.org/licenses/Apache-2.0","version":"0.2.2","runtimePlatform":"Node.js","isPartOf":{"@type":"WebSite","name":"three.ws","url":"https://three.ws"}}</script>
+<style>
+:root{--bg:#fff;--fg:#0f172a;--mut:#475569;--line:#e2e8f0;--code:#f1f5f9;--acc:#6d28d9}
+@media (prefers-color-scheme:dark){:root{--bg:#0b1020;--fg:#e2e8f0;--mut:#94a3b8;--line:#1e293b;--code:#111a33;--acc:#a78bfa}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif}
+header{border-bottom:1px solid var(--line)}.bar{max-width:880px;margin:0 auto;padding:14px 20px;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.bar a{color:var(--mut);text-decoration:none;font-size:14px}.bar a:hover,.bar a:focus-visible{color:var(--acc)}.bar b{color:var(--fg);margin-right:auto}
+main{max-width:880px;margin:0 auto;padding:28px 20px 80px}h1,h2,h3{line-height:1.25}h2{margin-top:2.2em;padding-bottom:.3em;border-bottom:1px solid var(--line)}
+a{color:var(--acc)}pre{background:var(--code);padding:14px 16px;border-radius:8px;overflow:auto}code{background:var(--code);padding:.1em .35em;border-radius:4px;font-size:.92em}pre code{padding:0;background:none}
+table{border-collapse:collapse;display:block;overflow:auto}th,td{border:1px solid var(--line);padding:6px 10px;text-align:left}img{max-width:100%}
+</style>
+</head>
+<body>
+<header><nav class="bar" aria-label="Project"><b>@three-ws/avatar-cli</b><a href="https://github.com/nirholas/three-ws-avatar-cli">GitHub</a><a href="https://www.npmjs.com/package/@three-ws/avatar-cli">npm</a><a href="llms.txt">llms.txt</a><a href="https://three.ws">three.ws</a></nav></header>
+<main>
+<p align="center">
+  <a href="https://three.ws"><img src="https://three.ws/three-ws-mcp-icon.svg" width="72" height="72" alt="three.ws" /></a>
+</p><h1 align="center">@three-ws/avatar-cli</h1><p align="center"><strong>Terminal-native tooling for on-chain avatars: scaffold, validate, hash, and preview avatar manifests.</strong></p><p align="center">
+  <a href="https://www.npmjs.com/package/@three-ws/avatar-cli"><img alt="npm" src="https://img.shields.io/npm/v/@three-ws/avatar-cli?logo=npm&color=cb3837"></a>
+  <a href="https://www.npmjs.com/package/@three-ws/avatar-cli"><img alt="downloads" src="https://img.shields.io/npm/dm/@three-ws/avatar-cli?color=cb3837"></a>
+  <img alt="license" src="https://img.shields.io/npm/l/@three-ws/avatar-cli?color=3b82f6">
+  <img alt="node" src="https://img.shields.io/node/v/@three-ws/avatar-cli?color=339933&logo=node.js">
+</p><p align="center">
+  <a href="#install">Install</a> ·
+  <a href="#quick-start">Quick start</a> ·
+  <a href="#commands">Commands</a> ·
+  <a href="#ci-usage">CI usage</a> ·
+  <a href="https://three.ws">three.ws</a>
+</p><hr>
+<blockquote>
+<p><code>@three-ws/avatar-cli</code> brings the three.ws on-chain avatar workflow to your shell
+and CI. It scaffolds spec-compliant manifests from a wallet and a mesh file,
+validates existing manifests, computes content-addressing hashes, and prints
+embeddable preview snippets. Every command runs offline against
+<a href="https://www.npmjs.com/package/@three-ws/avatar-schema"><code>@three-ws/avatar-schema</code></a></p>
+<ul>
+<li>no service to sign up for, no browser required.</li>
+</ul>
+</blockquote>
+<h2>Install</h2>
+<pre><code class="language-bash"># run a single command without installing
+npx @three-ws/avatar-cli --help
+
+# or install globally
+npm install -g @three-ws/avatar-cli
+three-ws-avatar --help
+</code></pre>
+<p>The binary is <code>three-ws-avatar</code>. <code>--version</code> prints the package version; <code>--help</code> /
+<code>-h</code> prints usage.</p>
+<h2>Quick start</h2>
+<pre><code class="language-bash"># 1. Grab a real rigged avatar to work with (or point --mesh at your own GLB)
+curl -sLO https://three.ws/avatars/michelle.glb
+
+# 2. Scaffold a manifest from your wallet + mesh (sha256 + size computed for you)
+three-ws-avatar init \
+  --owner eip155:1:0x742d35Cc6634C0532925a3b844Bc454e4438f44e \
+  --name &quot;Nicholas&quot; \
+  --mesh ./michelle.glb \
+  --skeleton mixamo \
+  --out manifest.json
+# → ok wrote /…/manifest.json   (validated against @three-ws/avatar-schema before writing)
+#   plus a summary line for id, skeleton, and mesh (format · size · sha256)
+
+# 3. Validate it
+three-ws-avatar validate manifest.json
+# → ok manifest.json is valid
+
+# 4. Print embed snippets
+three-ws-avatar preview manifest.json
+# → resolver URL, &lt;agent-3d&gt; element + loader, and &lt;iframe&gt; snippet
+</code></pre>
+<h2>Commands</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>init</code></td>
+<td>Scaffold a new avatar manifest from a wallet and mesh file.</td>
+</tr>
+<tr>
+<td><code>validate &lt;path&gt;</code></td>
+<td>Validate an existing manifest against the schema (exit 1 if invalid).</td>
+</tr>
+<tr>
+<td><code>hash &lt;path&gt;</code></td>
+<td>Compute the SHA-256 of any file, lowercase hex.</td>
+</tr>
+<tr>
+<td><code>preview &lt;path&gt;</code></td>
+<td>Print resolver URL + an embeddable <code>&lt;agent-3d&gt;</code> snippet (with its loader) and an <code>&lt;iframe&gt;</code> snippet.</td>
+</tr>
+</tbody></table>
+<h3><code>init</code> - scaffold a manifest</h3>
+<pre><code class="language-bash">three-ws-avatar init \
+  --owner &lt;caip10|0xaddr&gt; \
+  --name &lt;string&gt; \
+  --mesh &lt;path&gt; \
+  [--skeleton avaturn|mixamo|rpm|vrm-humanoid|custom] \
+  [--mesh-uri &lt;https://… or ipfs://…&gt;] \
+  [--id &lt;override&gt;] \
+  [--out manifest.json]
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Required</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>--owner</code></td>
+<td>yes</td>
+<td>Full CAIP-10 (<code>eip155:1:0x…</code>) or a shorthand <code>0x…</code> address (assumed <code>eip155:1</code>).</td>
+</tr>
+<tr>
+<td><code>--name</code></td>
+<td>yes</td>
+<td>Avatar display name.</td>
+</tr>
+<tr>
+<td><code>--mesh</code></td>
+<td>yes</td>
+<td>Path to a <code>.glb</code> / <code>.gltf</code> / <code>.vrm</code> file. SHA-256, byte size, and <code>format</code> are computed/inferred automatically.</td>
+</tr>
+<tr>
+<td><code>--skeleton</code></td>
+<td>no</td>
+<td>One of <code>avaturn</code> (default) / <code>mixamo</code> / <code>rpm</code> / <code>vrm-humanoid</code> / <code>custom</code>.</td>
+</tr>
+<tr>
+<td><code>--mesh-uri</code></td>
+<td>no</td>
+<td>Public URI to reference instead of the local <code>file://</code> path (use your IPFS/S3 URL).</td>
+</tr>
+<tr>
+<td><code>--id</code></td>
+<td>no</td>
+<td>Override the id; otherwise derived from the owner&#39;s CAIP-10, or from <code>--name</code> if it&#39;s an ENS-style <code>*.eth</code> / <code>*.ws</code> / <code>*.sol</code> name.</td>
+</tr>
+<tr>
+<td><code>--out</code></td>
+<td>no</td>
+<td>Write to a file (default: print JSON to stdout).</td>
+</tr>
+</tbody></table>
+<p>The manifest is <strong>validated against <code>@three-ws/avatar-schema</code> before output</strong> - if
+you get JSON back, it&#39;s spec-compliant by definition.</p>
+<h3><code>validate</code> - check a manifest</h3>
+<pre><code class="language-bash">three-ws-avatar validate manifest.json           # → ok manifest.json is valid
+three-ws-avatar validate manifest.json --json    # → {&quot;valid&quot;:true,&quot;path&quot;:&quot;manifest.json&quot;}
+</code></pre>
+<p>Exit code <code>0</code> if valid, <code>1</code> otherwise. On failure, each error prints its JSON
+instance path and message (or a structured <code>errors</code> array with <code>--json</code>).</p>
+<h3><code>hash</code> - SHA-256 a file</h3>
+<pre><code class="language-bash">sha=$(three-ws-avatar hash ./michelle.glb)
+echo &quot;$sha&quot;
+# 28d788538f7b22b8e00c1d715fffc380bb06a304613d522c20523d3d6ff79bc2
+</code></pre>
+<p><code>--json</code> emits <code>{ &quot;path&quot;, &quot;sha256&quot;, &quot;bytes&quot; }</code> instead of the bare hex line.</p>
+<h3><code>preview</code> - embed snippets</h3>
+<pre><code class="language-bash">three-ws-avatar preview manifest.json
+</code></pre>
+<p>Prints three things:</p>
+<ol>
+<li>The resolver URL, <code>https://three.ws/a/{id}</code></li>
+<li>An <code>&lt;agent-3d&gt;</code> web-component snippet, together with the loader <code>&lt;script&gt;</code> that
+registers the element. Both lines are printed because <code>&lt;agent-3d&gt;</code> is an ordinary
+unknown element until that script runs, so the snippet is only complete with both.</li>
+<li>A zero-install <code>&lt;iframe&gt;</code> embed snippet</li>
+</ol>
+<p>When <code>mesh.uri</code> is still a local <code>file://</code> path, <code>preview</code> warns instead of printing a
+snippet no browser can load. Pass <code>--mesh-uri</code> to <code>init</code> to set a public URL.</p>
+<p>Use <code>--viewer http://localhost:3000</code> to target a local dev viewer, or <code>--json</code> for
+machine-readable output
+(<code>{ id, resolverUrl, loader, element, iframe, meshUri, meshIsLocal, schemaVersion }</code>).</p>
+<h2>CI usage</h2>
+<p>Avatars are content, and content belongs in a build pipeline:</p>
+<pre><code class="language-bash"># Fail the build if the mesh bytes drifted from what the manifest attests to.
+expected=$(node -p &quot;require(&#39;./manifest.json&#39;).mesh.sha256&quot;)
+actual=$(three-ws-avatar hash ./michelle.glb)
+[ &quot;$expected&quot; = &quot;$actual&quot; ] || { echo &quot;mesh hash mismatch&quot;; exit 1; }
+
+# Gate every manifest change on schema validity.
+three-ws-avatar validate manifest.json
+</code></pre>
+<h2>Requirements</h2>
+<ul>
+<li>Node <code>&gt;=18</code>.</li>
+<li>Bundled dependency: <a href="https://www.npmjs.com/package/@three-ws/avatar-schema"><code>@three-ws/avatar-schema</code></a> (used to validate every scaffolded and checked manifest).</li>
+</ul>
+<h2>Related packages</h2>
+<ul>
+<li><a href="https://www.npmjs.com/package/@three-ws/avatar-schema"><code>@three-ws/avatar-schema</code></a> - the manifest format this CLI scaffolds and validates.</li>
+<li><a href="https://www.npmjs.com/package/@three-ws/avatar"><code>@three-ws/avatar</code></a> is the runtime SDK behind the <code>&lt;agent-3d&gt;</code> element the <code>preview</code> snippets embed.</li>
+</ul>
+<h2>Links</h2>
+<ul>
+<li>Homepage: <a href="https://three.ws">https://three.ws</a></li>
+<li>Changelog: <a href="https://three.ws/changelog">https://three.ws/changelog</a></li>
+<li>Issues: <a href="https://github.com/nirholas/three.ws/issues">https://github.com/nirholas/three.ws/issues</a></li>
+<li>License: Apache-2.0, see <a href="./LICENSE">LICENSE</a></li>
+</ul>
+<hr>
+<p align="center">
+  <sub>
+    Part of the <a href="https://three.ws">three.ws</a> SDK suite - 3D AI agents, on-chain identity, and agent payments.<br/>
+    <a href="https://three.ws">Website</a> · <a href="https://three.ws/changelog">Changelog</a> · <a href="https://github.com/nirholas/three.ws">GitHub</a>
+  </sub>
+</p><hr>
+<p>Part of <a href="https://three.ws">three.ws</a>, the open-source platform for 3D AI agents. This repository is exported from the <a href="https://github.com/nirholas/three.ws/tree/main/packages/avatar-cli">monorepo</a>, which is the source of truth: open issues here, and send larger changes there.</p>
+
+</main>
+</body>
+</html>
