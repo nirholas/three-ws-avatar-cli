@@ -2,9 +2,17 @@
   "name": "three-ws-avatar",
   "version": "0.2.2",
   "description": "Scaffold, validate, hash and preview on-chain avatar manifests with the three-ws-avatar CLI.",
-  "author": {"name": "nirholas"},
+  "author": {
+    "name": "nirholas"
+  },
   "repository": "https://github.com/nirholas/three-ws-avatar-cli",
+  "homepage": "https://nirholas.github.io/three-ws-avatar-cli/",
   "license": "Apache-2.0",
-  "keywords": ["avatar", "manifest", "gltf", "caip", "cli"],
-  "homepage": "https://nirholas.github.io/three-ws-avatar-cli/"
+  "keywords": [
+    "avatar",
+    "manifest",
+    "gltf",
+    "caip",
+    "cli"
+  ]
 }
