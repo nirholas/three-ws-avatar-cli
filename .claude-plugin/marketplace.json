@@ -1,0 +1,13 @@
+{
+  "name": "three-ws-avatar",
+  "owner": {"name": "nirholas"},
+  "description": "Offline avatar manifest tooling for shells and CI.",
+  "plugins": [
+    {
+      "name": "three-ws-avatar",
+      "source": "./",
+      "description": "Create and validate spec-compliant avatar manifests from a wallet and a GLB mesh, and print embed snippets.",
+      "tags": ["avatar", "manifest", "cli"]
+    }
+  ]
+}
